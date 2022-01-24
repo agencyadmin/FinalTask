@@ -128,7 +128,7 @@
                 {
                     using (StreamWriter sw = File.AppendText(@"C:\Users\wmtra\Desktop\TestDir\Students\" + a.Group + ".txt"))
                     {
-                        sw.WriteLine($"Имя студента: {a.Name}, Дата рождения студента: {a.Name}");
+                        sw.WriteLine($"Имя студента: {a.Name}, Дата рождения студента: {a.DateOfBirth}");
 
                     }
                 }

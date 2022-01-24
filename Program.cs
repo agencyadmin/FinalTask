@@ -5,7 +5,7 @@
     using System.Runtime.Serialization.Formatters.Binary;
 
     [Serializable]
-    class Student // Описываем  класс  и помечаем его атрибутом для последующей сериализации или десериализации
+    public class Student // Описываем  класс  и помечаем его атрибутом для последующей сериализации или десериализации
     {
         public string Name { get; set; }
         // после замены типов на float, int, bool выдало ошибку десериализации : System.Runtime.Serialization.SerializationException:
@@ -93,11 +93,14 @@
             //    Console.WriteLine("Объект сериализован");
             //}
             // десериализация
-            using (var fs = new FileStream(@"C:\Users\wmtra\Desktop\TestDir\Students.dat", FileMode.Open))
+            using (var fs = new FileStream(@"C:\Users\wmtra\Desktop\TestDir\Students.dat", FileMode.Open, FileAccess.Read))
             {
-                var newStudent = (Student)formatter.Deserialize(fs);
+
+                Student[] newStudent = null;
+                 newStudent = (Student[])formatter.Deserialize(fs);
                 Console.WriteLine("Объект десериализован:");
-                Console.WriteLine($"Имя: {newStudent.Name} --- Группа: {newStudent.Group} +++++++++++ Дата рождения: {newStudent.DateOfBirth} --- ");
+                foreach (Student student in newStudent)
+                Console.WriteLine($"Имя: {student.Name} --- Группа: {student.Group} +++++++++++ Дата рождения: {student.DateOfBirth} --- ");
             }
         }
         public static void WriteValues(string urlDataFile)

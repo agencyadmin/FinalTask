@@ -22,15 +22,19 @@
 
         }
     }
+
+
     class Program
     {
         public static void Main(string[] args)
 
         {
-            ReadDeSerValues(@"C:\Users\wmtra\Desktop\TestDir\Students.dat");
+            Student[] newStudent = null;
+
+            newStudent = ReadDeSerValues(@"C:\Users\wmtra\Desktop\TestDir\Students.dat");
             //ReadValues(@"C:\Users\wmtra\Desktop\TestDir\Students.dat");
             //ReadTXTValues(@"C:\Users\wmtra\Desktop\TestDir\Students.dat");
-            //WriteValues();
+            WriteValues(@"C:\Users\wmtra\Desktop\TestDir\Students", newStudent);
         }
 
         public static void ReadValues(string urlDataFile)
@@ -81,7 +85,7 @@
                 }
         }
 
-        public static void ReadDeSerValues(string urlDataFile)
+        public static Student[] ReadDeSerValues(string urlDataFile)
         {
             //эта идея с прямой десериализацией файла не прошла , выдает ошибку System.Runtime.Serialization.SerializationException: 'The input stream is not a valid binary format. The starting contents (in bytes) are: 
             BinaryFormatter formatter = new BinaryFormatter();
@@ -95,17 +99,41 @@
             // десериализация
             using (var fs = new FileStream(@"C:\Users\wmtra\Desktop\TestDir\Students.dat", FileMode.Open, FileAccess.Read))
             {
-
                 Student[] newStudent = null;
-                 newStudent = (Student[])formatter.Deserialize(fs);
+
+                newStudent = (Student[])formatter.Deserialize(fs);
                 Console.WriteLine("Объект десериализован:");
                 foreach (Student student in newStudent)
-                Console.WriteLine($"Имя: {student.Name} --- Группа: {student.Group} +++++++++++ Дата рождения: {student.DateOfBirth} --- ");
+                    Console.WriteLine($"Имя: {student.Name} --- Группа: {student.Group} +++++++++++ Дата рождения: {student.DateOfBirth} --- ");
+                return newStudent;
             }
         }
-        public static void WriteValues(string urlDataFile)
+        public static void WriteValues(string urlDir, Student[] newStudent)
         {
+            if (!Directory.Exists(urlDir)) Directory.CreateDirectory(urlDir);
 
+            foreach (Student a in newStudent)
+            {
+                if (!File.Exists(@"C:\Users\wmtra\Desktop\TestDir\Students\" + a.Group + ".txt"))
+                {
+
+
+                    using (StreamWriter sw = File.CreateText(@"C:\Users\wmtra\Desktop\TestDir\Students\" + a.Group + ".txt"))
+                    {
+                        sw.WriteLine($"Имя студента: {a.Name}, Дата рождения студента: {a.Name}");
+                    }
+                }
+
+                else
+                {
+                    using (StreamWriter sw = File.AppendText(@"C:\Users\wmtra\Desktop\TestDir\Students\" + a.Group + ".txt"))
+                    {
+                        sw.WriteLine($"Имя студента: {a.Name}, Дата рождения студента: {a.Name}");
+
+                    }
+                }
+
+            }
         }
     }// изучить док майкрасофт десереализации и чтение бинарного файла// в слек глянуть решение этого задания
 }
